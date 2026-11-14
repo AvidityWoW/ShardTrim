@@ -9,6 +9,21 @@ at your limit. Movement and every other key still work as normal.
 
 For WoW Forever only (interface 16001).
 
+## Download
+
+[![Download Shard Trim](https://img.shields.io/badge/Download-Shard%20Trim-8f3fda?style=for-the-badge)](https://github.com/AvidityWoW/ShardTrim/releases/latest/download/ShardTrim.zip)
+
+The button always gets the newest version. To install it:
+
+1. Click **Download** above. You get a file called `ShardTrim.zip`.
+2. Open the zip. Inside is a folder called `ShardTrim`.
+3. Drag that `ShardTrim` folder into your WoW Forever AddOns folder, usually
+   `C:\Program Files (x86)\World of Warcraft\_forever_\Interface\AddOns`.
+   If you already have Shard Trim, replace the old folder.
+4. Start the game, or type `/reload` if it's already running.
+
+Older versions and the list of changes are on the [Releases page](https://github.com/AvidityWoW/ShardTrim/releases).
+
 ## Features
 
 - **Shards to Keep** limit, 0 to 100. It never goes below the slots in your equipped shard bags.
@@ -26,8 +41,7 @@ For WoW Forever only (interface 16001).
 
 ## Installing
 
-Download a release zip and unzip it into your client's AddOns folder, so you end up with
-`World of Warcraft/_forever_/Interface/AddOns/ShardTrim`. Then restart the game or `/reload`.
+See [Download](#download) above.
 
 ### From this repo
 
