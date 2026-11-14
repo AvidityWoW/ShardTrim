@@ -1,0 +1,36 @@
+name: Package
+
+# Every push and pull request builds the addon zip and keeps it as a downloadable artifact.
+# Pushing a tag (e.g. v1.15.0) also uploads that build to CurseForge and makes a GitHub release.
+on:
+  push:
+    branches: [main]
+    tags: ["*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write # lets the packager create the GitHub release on tags
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    env:
+      CF_API_KEY: ${{ secrets.CF_API_KEY }}
+      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history, for the packager's changelog
+
+      - name: Package (uploads only for tags)
+        uses: BigWigsMods/packager@v2
+        with:
+          args: ${{ startsWith(github.ref, 'refs/tags/') && ' ' || '-d' }}
+
+      - name: Keep the zip as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ShardTrim
+          path: .release/*.zip
+          if-no-files-found: error

@@ -1,4 +1,4 @@
-## Interface: 16001, 120100, 120105
+## Interface: 16001
 ## Title: |cff8f3fdaAvidity|r Shard Trim
 ## Notes: Trims your Soul Shards down to a limit you set - automatically on any key press or click, or with one click on a banner you can drag anywhere. Includes a minimap button and data broker.
 ## Author: Avidity

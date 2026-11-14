@@ -1,0 +1,5 @@
+# BigWigsMods packager settings (see .github/workflows/package.yml)
+package-as: ShardTrim
+
+ignore:
+  - README.md
