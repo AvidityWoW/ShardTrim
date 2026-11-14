@@ -1,0 +1,6 @@
+<Bindings>
+	<Binding name="SHARDTRIM_TOGGLE" header="SHARDTRIM" category="ADDONS">
+		ShardTrim_Toggle()
+	</Binding>
+	<Binding name="CLICK ShardTrimButton:LeftButton" category="ADDONS"/>
+</Bindings>
