@@ -26,8 +26,19 @@ For WoW Forever only (interface 16001).
 
 ## Installing
 
-Copy the `ShardTrim` folder into your client's AddOns folder, for example
-`World of Warcraft/_forever_/Interface/AddOns/ShardTrim`, then restart the game or `/reload`.
+Download a release zip and unzip it into your client's AddOns folder, so you end up with
+`World of Warcraft/_forever_/Interface/AddOns/ShardTrim`. Then restart the game or `/reload`.
+
+### From this repo
+
+The libraries in `Libs/` aren't kept in the repo. The packager downloads them for release builds
+(see `.pkgmeta`). To run the addon straight from a clone, download them once first:
+
+```
+./fetch-libs.sh
+```
+
+Then copy the folder into your AddOns folder. Run the script again any time to update the libraries.
 
 ## Using it
 
@@ -155,12 +166,14 @@ package folder and keeps `README.md` out of the zip.
 | `ShardTrim.toc` | Addon manifest: interface versions, title, version, saved variables (`ShardTrimDB`) and load order |
 | `ShardTrim.lua` | The whole addon (see below) |
 | `Bindings.xml` | The two keybinds under Key Bindings > AddOns |
-| `.pkgmeta` | Packager settings: the folder name and files left out of the zip |
+| `.pkgmeta` | Packager settings: the folder name, the libraries to download (externals), and files left out of the zip |
+| `fetch-libs.sh` | Downloads the libraries into `Libs/` for running from a clone |
+| `.gitignore` | Keeps the downloaded `Libs/` and the packager's `.release/` out of git |
 | `.github/workflows/package.yml` | Builds the zip on every push, and uploads to CurseForge on tags |
-| `Libs/LibStub/` | Library version loader the other libraries need |
-| `Libs/CallbackHandler-1.0/` | Event callbacks, used by LibDataBroker and the skinning API's `RegisterCallback` |
-| `Libs/LibDataBroker-1.1/` | Data broker, for Titan Panel, ChocolateBar and other broker bars |
-| `Libs/LibDBIcon-1.0/` | The minimap button |
+| `Libs/LibStub/` | Library version loader the other libraries need (downloaded, not in the repo) |
+| `Libs/CallbackHandler-1.0/` | Event callbacks, used by LibDataBroker and the skinning API's `RegisterCallback` (downloaded) |
+| `Libs/LibDataBroker-1.1/` | Data broker, for Titan Panel, ChocolateBar and other broker bars (downloaded) |
+| `Libs/LibDBIcon-1.0/` | The minimap button (downloaded) |
 
 ### ShardTrim.lua, top to bottom
 

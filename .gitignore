@@ -1,0 +1,4 @@
+# Downloaded libraries (see .pkgmeta externals; ./fetch-libs.sh for local testing)
+Libs/
+# Packager output
+.release/

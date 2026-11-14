@@ -34,3 +34,4 @@ jobs:
           name: ShardTrim
           path: .release/*.zip
           if-no-files-found: error
+          include-hidden-files: true # .release starts with a dot, which is skipped by default
