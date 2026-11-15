@@ -2,10 +2,11 @@
 ## Title: |cff8f3fdaAvidity|r Shard Trim
 ## Notes: Trims your Soul Shards down to a limit you set - automatically on any key press or click, or with one click on a banner you can drag anywhere. Includes a minimap button and data broker.
 ## Author: Avidity
-## Version: 1.15.0
+## Version: 1.15.1
 ## SavedVariables: ShardTrimDB
 ## IconTexture: Interface\Icons\INV_Misc_Gem_Amethyst_02
 ## X-Category: Inventory
+## X-Curse-Project-ID: 1805762
 ## DefaultState: Enabled
 
 Libs\LibStub\LibStub.lua
