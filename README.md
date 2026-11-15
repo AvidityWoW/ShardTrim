@@ -7,7 +7,8 @@ The game only allows deleting an item during a real key press or click, and only
 press. So Shard Trim deletes one extra shard each time you press a key or click, until you're back
 at your limit. Movement and every other key still work as normal.
 
-For WoW Forever only (interface 16001).
+For WoW Forever only (interface 16001). It only runs on warlocks: on other characters it shows
+nothing, with no banner, minimap button, broker entry or options page.
 
 ## Download
 

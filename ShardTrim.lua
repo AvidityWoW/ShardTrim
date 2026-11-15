@@ -28,6 +28,7 @@ local COUNT_POSITIONS = {
 }
 ShardTrimDB = ShardTrimDB or {}
 local busy, loaded, previewing, category, Update
+local notWarlock -- set at login on other classes: the addon then stays out of the way entirely
 local settings = {} -- key -> Settings object, so changes made elsewhere show in the panel too
 
 -- Returns the shard count, the limit (never below your shard bags' slots) and the first shard's { bag, slot }.
@@ -51,7 +52,7 @@ local function Scan()
 end
 
 local function Trim()
-	if not ShardTrimDB.enabled or busy or GetCursorInfo() or GetCurrentKeyBoardFocus() then return end
+	if not loaded or not ShardTrimDB.enabled or busy or GetCursorInfo() or GetCurrentKeyBoardFocus() then return end
 	local total, limit, shard = Scan()
 	if total <= limit then return end
 
@@ -69,11 +70,12 @@ local function Set(key, value)
 		settings[key]:SetValue(value)
 	else
 		ShardTrimDB[key] = value
-		if Update then Update() end
+		if loaded then Update() end
 	end
 end
 
 local function SetEnabled(on)
+	if notWarlock then return print(NAME .. "only works on warlocks.") end
 	Set("enabled", on)
 	print(NAME .. (on and "|cff20ff20on|r" or "|cffff2020off|r") .. ".")
 end
@@ -591,28 +593,32 @@ end)
 bar:SetScript("OnDragStop", bar.StopMovingOrSizing)
 
 -- Data broker (shows in Titan Panel, ChocolateBar, Bazooka, ...) and minimap button.
-local broker = LibStub("LibDataBroker-1.1"):NewDataObject("ShardTrim", {
-	type = "data source",
-	label = "Soul Shards",
-	icon = ICON,
-	text = "",
-	OnClick = function(_, button)
-		if button == "RightButton" then
-			OpenOptions()
-		elseif IsShiftKeyDown() then
-			Trim()
-		else
-			ShardTrim_Toggle()
-		end
-	end,
-	OnTooltipShow = function(tt)
-		FillTooltip(tt, {
-			"Left-click: turn trimming " .. (ShardTrimDB.enabled and "off" or "on"),
-			"Shift-click: delete one extra shard",
-			"Right-click: options",
-		})
-	end,
-})
+-- Made at login, and only for warlocks, so broker bars on other classes don't list it.
+local broker
+local function CreateBroker()
+	broker = LibStub("LibDataBroker-1.1"):NewDataObject("ShardTrim", {
+		type = "data source",
+		label = "Soul Shards",
+		icon = ICON,
+		text = "",
+		OnClick = function(_, button)
+			if button == "RightButton" then
+				OpenOptions()
+			elseif IsShiftKeyDown() then
+				Trim()
+			else
+				ShardTrim_Toggle()
+			end
+		end,
+		OnTooltipShow = function(tt)
+			FillTooltip(tt, {
+				"Left-click: turn trimming " .. (ShardTrimDB.enabled and "off" or "on"),
+				"Shift-click: delete one extra shard",
+				"Right-click: options",
+			})
+		end,
+	})
+end
 local LDBIcon = LibStub("LibDBIcon-1.0")
 local minimapStatus -- tick or cross over the minimap button's icon
 
@@ -777,6 +783,12 @@ local events = CreateFrame("Frame")
 events:RegisterEvent("PLAYER_LOGIN")
 events:SetScript("OnEvent", function(self, event)
 	if event == "PLAYER_LOGIN" then
+		if select(2, UnitClass("player")) ~= "WARLOCK" then -- no banner, minimap button, broker or options
+			notWarlock = true
+			bar:Hide()
+			self:UnregisterAllEvents()
+			return
+		end
 		if ShardTrimDB.banner == nil then -- carry over the old "Always Show Banner" checkbox and macro mode's hidden banner
 			ShardTrimDB.banner = ShardTrimDB.method == "macro" and "never" or ShardTrimDB.alwaysShow and "always" or nil
 		end
@@ -803,6 +815,7 @@ events:SetScript("OnEvent", function(self, event)
 		end
 		ShardTrimDB.minimapIcon = ShardTrimDB.minimapIcon or {}
 		ShardTrimDB.minimapIcon.hide = not ShardTrimDB.minimap
+		CreateBroker()
 		LDBIcon:Register("ShardTrim", broker, ShardTrimDB.minimapIcon)
 		local button = LDBIcon:GetMinimapButton("ShardTrim")
 		if button and button.icon then
@@ -827,6 +840,7 @@ _G["BINDING_NAME_CLICK ShardTrimButton:LeftButton"] = "Delete One Extra Shard"
 SLASH_SHARDTRIM1, SLASH_SHARDTRIM2 = "/shardtrim", "/strim"
 SlashCmdList.SHARDTRIM = function(msg)
 	msg = strtrim(msg:lower())
+	if notWarlock then return print(NAME .. "only works on warlocks.") end
 	local n = tonumber(msg:match("%d+"))
 	if n then
 		Set("threshold", math.min(n, 100))
